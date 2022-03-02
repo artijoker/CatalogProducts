@@ -1,0 +1,39 @@
+@page "/"
+@using HttpModels
+@implements IDisposable
+@inject IClock Clock
+
+<PageTitle>Index</PageTitle>
+
+<h1>Добро пожаловать в интернет магазин Razbat</h1>
+<div>Текущее время: @_currentTime.ToLongTimeString()</div>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private PeriodicTimer _timer = new(TimeSpan.FromSeconds(1));
+
+    private DateTime _currentTime = DateTime.Now;
+
+    private CancellationTokenSource _cts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _ = StartTimer();
+    }
+
+    private async Task StartTimer()
+    {
+        while (await _timer.WaitForNextTickAsync())
+        {
+            _currentTime = Clock.GetClock();
+            StateHasChanged();
+        }
+    }
+    public void Dispose()
+    {
+        _timer.Dispose();
+    }
+}

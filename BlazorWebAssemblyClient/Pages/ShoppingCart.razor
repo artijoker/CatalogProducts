@@ -1,0 +1,38 @@
+@page "/ShoppingCart"
+@using HttpModels
+
+@inject IShoppingCart Shopping
+<h3 class="mx-auto">Корзина</h3>
+
+<button class="btn mt-2 mb-3" @onclick="@(() => Shopping.Clear())">
+    Очистить корзину
+</button>
+
+<h4>Список выбранных товаров:</h4>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th style="padding:15px;">Название</th>
+            <th style="padding:15px;">Категория</th>
+            <th style="padding:15px; text-align:right;">Цена</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Shopping.GetProducts())
+        {
+            string href = $"/ProductInformation";
+            <tr>
+                <ProductItem Product="item" />
+                <td style="padding:15px;">
+                    <button class="btn" @onclick="@(() => {Shopping.DeleteProduct(item); StateHasChanged();})">
+                        Удалить
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,59 @@
+@page "/Catalog"
+
+@using Blazored.Toast
+@using Blazored.Toast.Services
+@using HttpModels
+@*@using Microsoft.AspNetCore.Http*@
+
+
+@inject IToastService _toastService
+@*@inject IHttpContextAccessor Context*@
+@inject IClock _clock
+@inject ICatalog _catalog
+@inject IShoppingCart _shoppingCart
+
+<PageTitle>Catalog</PageTitle>
+<h3>Каталог товаров</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th style="padding:15px;">Название</th>
+            <th style="padding:15px;">Категория</th>
+            <th style="padding:15px; text-align:right;">Цена</th>
+            <th style="padding:15px; text-align:right;">Количество</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in _catalog.GetProducts("", date: _clock.GetClock()))
+        {
+            <tr>
+                <ProductItem Product="item" />
+                <td class="textPositionRight">@item.Quantity</td>
+                <td style="padding:15px;">
+                    <button class="btn" @onclick="@(() => AddToShoppingCart(item))">
+                        Купить
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code
+{
+    //private string _userAgent;
+
+    //protected override void OnInitialized()
+    //{
+    //    _userAgent = Context.HttpContext.Request.Headers["User-Agent"];
+    //}
+    private void AddToShoppingCart(Product product)
+    {
+        _toastService.ShowInfo("Товар добавлен в корзину", product.Name);
+        _shoppingCart.AddProduct(product);
+    }
+}

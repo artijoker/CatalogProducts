@@ -1,0 +1,52 @@
+@model IReadOnlyCollection<HttpModels.Product>?
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+@{
+    if (Model is not null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th style="padding:15px;">Название</th>
+                    <th style="padding:15px;">Категория</th>
+                    <th style="padding:15px; text-align:right;">Цена</th>
+                    <th style="padding:15px; text-align:right;">Количество</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    
+                    string href = $"../ProductInformation/ProductInformation?id={@item.Id}";
+                    
+                    <tr onclick="location.href='@href'">
+                        @{
+                            if (item.UrlImage is not null)
+                            {
+                                <td style="padding:15px;">
+                                    <img src="@item.UrlImage" width="125" alt="None">
+                                </td>
+                            }
+                            else
+                            {
+                                <td>None</td>
+                            }
+                        }
+                        <td style="padding:15px;">@item.Name</td>
+                        <td style="padding:15px;">@item.Category.Name</td>
+                        <td style="padding:15px; text-align:right;">@item.Price</td>
+                        <td style="padding:15px; text-align:right;">@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+        
+    }
+}

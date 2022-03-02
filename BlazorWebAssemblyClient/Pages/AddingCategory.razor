@@ -1,0 +1,59 @@
+@page "/AddingCategory"
+@using System.ComponentModel.DataAnnotations
+@using HttpModels
+
+@inject ICatalog _catalog
+@inject IToastService _toastService
+<h3>Добавление категории</h3>
+<EditForm Model="_model" OnValidSubmit="AddNewCategory">
+    <DataAnnotationsValidator/>
+    <div>ID:</div>
+    <div class="row">
+        <InputText class="col-4" @bind-Value="_model.Id" />
+    </div>
+    <div class="mt-2">Имя*:</div>
+    <div class="row">
+        <InputText class="col-4" @bind-Value="_model.Name" required minlength="5"/>
+    </div>
+    <div class="row mt-3">
+        <input class="col-1 me-2" type="submit" name="submit" value="Создать" />
+    </div>
+    <ValidationSummary/>
+</EditForm>
+
+@code {
+    private CategoryModel _model = new();
+
+    private class CategoryModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    private void AddNewCategory()
+    {
+        Guid id = Guid.NewGuid();
+        if (!string.IsNullOrEmpty(_model.Id))
+        {
+            try
+            {
+                id = Guid.Parse(_model.Id);
+            }
+            catch (FormatException)
+            {
+                _toastService.ShowError("Неверный формат ID категории.", "Ошибка!");
+                return;
+            }
+        }
+        if (_catalog.GetCategories().Any(c => c.Id == id))
+        {
+            _toastService.ShowError("Категориия с таким ID уже существует.", "Ошибка!");
+            return;
+        }
+
+        _catalog.AddCategorie(new(id, _model.Name));
+        _toastService.ShowInfo("Новая категория добавлена.");
+        _model.Id = "";
+        _model.Name = "";
+    }
+}

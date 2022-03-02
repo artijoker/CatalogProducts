@@ -1,0 +1,51 @@
+@page "/ProductInformation/{ProductId}"
+
+@inject IClock _clock
+@inject ICatalog _catalog
+@inject IHttpContextAccessor Context
+
+<PageTitle>ProductInformation</PageTitle>
+
+<h3>ProductInformation</h3>
+@{
+    //Product product = _catolog.GetProducts(Context.HttpContext.Request.Headers.UserAgent, date: Clock.GetClock()).First();
+}
+<div class="row">
+    <div class="col-4">
+        @{
+            if (Product.UrlImage is not null)
+            {
+                <img src="@Product.UrlImage" width="350" alt="None">
+            }
+        }
+    </div>
+    <div class="col">
+        <div class="row fw-bold">ID:</div>
+        <div class="row">@Product.Id</div>
+
+        <div class="row mt-4 fw-bold">Название:</div>
+        <div class="row">@Product.Name</div>
+
+        <div class="row mt-4 fw-bold">Категория:</div>
+        <div class="row">@Product.Category.Name</div>
+
+        <div class="row mt-4 fw-bold">Цена:</div>
+        <div class="row">@Product.Price</div>
+
+        <div class="row mt-4 fw-bold">Количество:</div>
+        <div class="row">@Product.Quantity</div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+    public Product Product { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var id = Guid.Parse(ProductId);
+        Product = _catalog.GetProductById(id);
+    }
+
+}

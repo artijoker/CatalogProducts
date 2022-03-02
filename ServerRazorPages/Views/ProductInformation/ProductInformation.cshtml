@@ -1,0 +1,43 @@
+@using HttpModels;
+@model Product?;
+@{
+    ViewData["Title"] = "ProductInformation";
+}
+
+@{
+    if (Model is not null)
+    {
+        <div class="row">
+            <div class="col-4">
+                @{
+                    if (Model.UrlImage is not null)
+                    {
+                        <img src="@Model.UrlImage" width="350" alt="None">
+                    }
+                }
+            </div>
+            <div class="col">
+                 <div class="row fw-bold">ID:</div>
+                <div class="row">@Model.Id</div>
+
+                <div class="row mt-4 fw-bold">Название:</div>
+                <div class="row">@Model.Name</div>
+
+                <div class="row mt-4 fw-bold">Категория:</div>
+                <div class="row">@Model.Category.Name</div>
+
+                <div class="row mt-4 fw-bold">Цена:</div>
+                <div class="row">@Model.Price</div>
+
+                <div class="row mt-4 fw-bold">Количество:</div>
+                <div class="row">@Model.Quantity</div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1>Ошибка! Товар не найден.</h1>
+    }
+}
+
+

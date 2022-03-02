@@ -1,0 +1,13 @@
+@page "/"
+@namespace ServerBlazor.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+
+}
+@*<script>
+    window.getUserAgent = () => {
+    return navigator.userAgent;
+    };
+    </script>*@
+<component type="typeof(App)" render-mode="ServerPrerendered" />

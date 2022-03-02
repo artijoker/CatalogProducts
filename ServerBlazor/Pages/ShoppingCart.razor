@@ -1,0 +1,55 @@
+@page "/ShoppingCart"
+
+@inject ObservableShoppingCart Shopping
+<h3>Корзина</h3>
+<button class="btn" @onclick="@(() => Shopping.Clear())">
+                        Очистить корзину
+                    </button>
+<h4>Список выбранных товаров:</h4>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th style="padding:15px;">Название</th>
+            <th style="padding:15px;">Категория</th>
+            <th style="padding:15px; text-align:right;">Цена</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in _products)
+        {
+            string href = $"/ProductInformation";
+            <tr>
+                <ProductItem Product="item" />
+                <td style="padding:15px;">
+                    <button class="btn" @onclick="@(() => {Shopping.DeleteProduct(item); StateHasChanged();})">
+                        Удалить
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private IReadOnlyList<Product> _products;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _products = Shopping.GetProducts();
+        Shopping.OnChanged += Refresh;
+    }
+    private void Refresh()
+    {
+        _products = Shopping.GetProducts();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Shopping.OnChanged -= Refresh;
+    }
+}

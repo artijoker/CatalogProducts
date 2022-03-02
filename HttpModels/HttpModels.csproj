@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\headphones.png" />
+    <None Remove="Images\icon-tv.png" />
+    <None Remove="Images\icon_ps4.png" />
+    <None Remove="Images\laptop.png" />
+    <None Remove="Images\premium-icon-tv-896280.png" />
+    <None Remove="Images\smartphone.png" />
+    <None Remove="Images\usb-flash-drive.png" />
+  </ItemGroup>
+
+</Project>

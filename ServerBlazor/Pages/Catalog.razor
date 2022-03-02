@@ -1,0 +1,62 @@
+@page "/Catalog"
+@using Microsoft.AspNetCore.Http
+
+
+@inject IToastService toastService
+@inject IHttpContextAccessor Context
+@inject IClock Clock
+@inject ICatalog _catolog
+@inject ObservableShoppingCart ShoppingCart
+@*@inject IJSRuntime JS*@
+
+
+<PageTitle>Catalog</PageTitle>
+
+<h3>Catalog</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th style="padding:15px;">Название</th>
+            <th style="padding:15px;">Категория</th>
+            <th style="padding:15px; text-align:right;">Цена</th>
+            <th style="padding:15px; text-align:right;">Количество</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in _catolog.GetProducts(_userAgent, date: Clock.GetClock()))
+        {
+            <tr>
+                <ProductItem Product="item" />
+                <td style="padding:15px;">
+                    <button class="btn" @onclick="@(() => AddToShoppingCart(item))">
+                        Купить
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    private string _userAgent;
+    private string name;
+    protected override void OnInitialized()
+    {
+        _userAgent = Context.HttpContext.Request.Headers.UserAgent;
+    }
+    private void AddToShoppingCart(Product product)
+    {
+        toastService.ShowInfo("Товар добавлен в корзину", product.Name);
+        ShoppingCart.AddProduct(product);
+    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await base.OnInitializedAsync();
+    //    _userAgent = await JS.InvokeAsync<string>("getUserAgent");
+    //}
+}

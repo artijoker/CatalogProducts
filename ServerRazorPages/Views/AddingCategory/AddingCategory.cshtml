@@ -1,0 +1,41 @@
+@model bool?
+
+@{
+    ViewData["Title"] = "AddingCategory";
+}
+@if (@Model is not null)
+{
+    @if (@Model == true)
+    {
+        <script>
+            window.alert("Новая категория добавлена.");
+        </script>
+    }
+    else
+    {
+        <script>
+            window.alert("Ошибка! Категория с таким ID уже существует.");
+        </script>
+    }
+}
+
+<form method="post">
+
+    <div>ID:</div>
+    <div class="row">
+        <input class="col-4" type="text" name="id" value="" />
+    </div>
+    <div class="mt-2">Имя*:</div>
+    <div class="row">
+        <input class="col-4" type="text" name="name" value="" required minlength="5" />
+    </div>
+    <div class="row mt-3">
+        <input class="col-1 me-2" type="submit" name="submit" value="Создать" />
+        @{
+            string href = $"../Home/Index";
+        }
+        <input class="col-1" type="button" name="cancel" value="Отмена" onclick="location.href='@href'" />
+    </div>
+
+</form>
+

@@ -1,0 +1,27 @@
+@inject NavigationManager NavigationManager
+@{
+    if (Product.UrlImage is not null)
+    {
+        <td style="padding:15px;">
+            <img  class="goTo" src="@Product.UrlImage" @onclick="(() => goToProduct(Product.Id))" width="125" alt="None" >
+        </td>
+    }
+    else
+    {
+        <td>None</td>
+    }
+}
+<td><span @onclick="(() => goToProduct(Product.Id))" class="goTo">@Product.Name</span></td>
+<td>@Product.Category.Name</td>
+<td class="textPositionRight">@Product.Price</td>
+
+
+@code {
+    [Parameter]
+    public Product Product { get; set; }
+
+    private void goToProduct(Guid productId)
+    {
+        NavigationManager.NavigateTo($"/ProductInformation/{productId}");
+    }
+}
